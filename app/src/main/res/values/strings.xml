@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TrombiSEN</string>
+    <string name="type_filter">Filtre</string>
+    <string name="tous">Tous</string>
+    <string name="loading">Chargement des données...</string>
+    <string name="noselect">Aucun résultat</string>
+
+    <string name="url_data">http://www.nossenateurs.fr/senateurs/enmandat/xml</string>
+    <string name="url_photo">http://www.nossenateurs.fr/senateur/photo/</string>
+    <string name="fic_cache">/senateurs.xml</string>
+</resources>
