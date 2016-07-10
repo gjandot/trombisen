@@ -36,7 +36,6 @@ android:background="@color/fond">
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal"
-			android:elevation="8dp"
 			android:background="@color/fond">
 		<ImageButton
 			android:id="@+id/btnH"
@@ -54,26 +53,21 @@ android:background="@color/fond">
 			android:background="@color/fond"
 			android:padding="8dp"
 			android:contentDescription="Femmes"/>
-		<FrameLayout
-			android:contentDescription="pour avoir un cadre"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:background="@drawable/border"
-			android:layout_margin="8dp">
 			<Spinner
 				android:id="@+id/spinner"
 				android:layout_width="fill_parent"
 				android:layout_height="fill_parent"
 				android:layout_weight="1"
-				android:contentDescription="Liste des groupes politiques"/>
-			</FrameLayout>
+				android:contentDescription="Liste des groupes politiques"
+				android:background="@drawable/border"
+				android:padding="2dp"
+				android:layout_margin="4dp"/>
 		</LinearLayout>
 		<FrameLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="9dp"
-			android:padding="5dp"
-			android:elevation="8dp"
+			android:layout_marginTop="2dp"
+			android:padding="4dp"
 			android:background="@color/fond">
 		<EditText android:id="@+id/search_box"
 			android:layout_width="fill_parent"

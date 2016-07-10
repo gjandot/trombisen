@@ -143,8 +143,8 @@ public class SenList extends Activity
 
 
 		spinner = (Spinner) findViewById(R.id.spinner);
-		//ArrayAdapter<String> adp = new ArrayAdapter<String> (this,android.R.layout.simple_spinner_dropdown_item, listeGroupes);
-		ArrayAdapter<String> adp = new ArrayAdapter<String> (this,R.layout.spinner, listeGroupes);
+
+		ArrayAdapter<String> adp = new ArrayAdapter<String> (this, R.layout.spinner, listeGroupes);
 		spinner.setAdapter(adp);
 		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
