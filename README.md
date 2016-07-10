@@ -1,6 +1,6 @@
-# TrombiSen
+# TrombiSEN
 
-An android application : interactive list of french senators.
+Android application : interactive list of french senators.
 
 Data extracted from http://www.nossenateurs.fr/ (see http://cpc.regardscitoyens.org/trac/wiki/API)
 
