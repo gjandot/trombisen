@@ -11,12 +11,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
-
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -30,7 +28,6 @@ import android.os.Message;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -42,10 +39,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
 
 
-public class SenList extends Activity
+public class SenList extends ListActivity
+	//ListActivity: pour bénéficier du "empty view"
+	//(@android:id/empty)
 {
 	static final String PREF_VUEH = "VH";
 	static final String PREF_VUEF = "VF";
@@ -241,7 +239,6 @@ public class SenList extends Activity
 				}
 				if (element.equals("slug")) {
 					//SenImgUrl = "http://www.nossenateurs.fr/senateur/photo/" + xpp.getText() + "/64";
-					//SenImgUrl = xpp.getText();
 					mSenateur.setImgUrl(xpp.getText());
 				}
 			}
@@ -255,6 +252,7 @@ public class SenList extends Activity
 
 		URL url = new URL(getResources().getString(R.string.url_data));
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
 		conn.setReadTimeout(10000 /* milliseconds */);
 		conn.setConnectTimeout(15000 /* milliseconds */);
 		conn.setRequestMethod("GET");
@@ -305,9 +303,7 @@ public class SenList extends Activity
 
 		@Override
 		protected HashMap<String, Object> doInBackground(HashMap<String, Object>... hm) {
-
 			InputStream iStream=null;
-			//String imgUrl = (String) "http://www.senat.fr/senimg/abate_patrick14263u.jpg";
 			String imgUrl = (String) "";
 			int position = (Integer) hm[0].get("position");
 
