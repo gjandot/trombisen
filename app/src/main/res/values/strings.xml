@@ -9,4 +9,5 @@
     <string name="url_data">http://www.nossenateurs.fr/senateurs/enmandat/xml</string>
     <string name="url_photo">http://www.nossenateurs.fr/senateur/photo/</string>
     <string name="fic_cache">/senateurs.xml</string>
+    <string name="err1">Données introuvables</string>
 </resources>

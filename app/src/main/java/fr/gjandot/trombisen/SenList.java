@@ -52,6 +52,10 @@ public class SenList extends ListActivity
 	static final String PREF_DATEMILLIS = "d";
 	static final long H4  = 4*3600*1000; /* 4 heures, en ms */
 
+	static final int MSG_OK = 1;
+	static final int MSG_ERR1 = 2;
+	static private int threadErr = MSG_OK;
+
 	final List<Senateur> listat = new ArrayList<Senateur>();
 	
 	private ListeAdapter adapter = null;
@@ -74,7 +78,7 @@ public class SenList extends ListActivity
 		setContentView(R.layout.listat);
 
         mListView = (ListView) findViewById(android.R.id.list);
-		//mListView.setEmptyView(findViewById(android.R.id.message));
+		//mListView.setEmptyView(findViewById(android.R.id.empty));
 
 		layout = (LinearLayout) findViewById(R.id.progress);
 		liste = (LinearLayout) findViewById(R.id.liste);
@@ -190,8 +194,10 @@ public class SenList extends ListActivity
 
 		//xpp.setInput(downloadUrl(), null);
 		if (is_date_old()) {
-			downloadUrl();
-			save_date();
+			if (downloadUrl())
+			{
+				save_date();
+			}
 		}
 		FileInputStream fis = new FileInputStream(new File(getCacheDir(), "/senateurs.xml"));
 		xpp.setInput(fis, null);
@@ -248,21 +254,28 @@ public class SenList extends ListActivity
 	}
 
 
-	private void downloadUrl() throws XmlPullParserException, IOException {
+	private boolean downloadUrl() throws XmlPullParserException, IOException {
 
 		URL url = new URL(getResources().getString(R.string.url_data));
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
 		conn.setReadTimeout(10000 /* milliseconds */);
-		conn.setConnectTimeout(15000 /* milliseconds */);
+		conn.setConnectTimeout(10000 /* milliseconds */);
 		conn.setRequestMethod("GET");
 		conn.setDoInput(true);
 		conn.connect();
-		//GESTION D'ERREUR !!!
+		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+			threadErr = MSG_ERR1;
+			conn.disconnect();
+			/* on n'efface pas le cache, pour garder les dernières données connues */
+			return false;
+		}
+		//TODO : pb réseau (timeout...)
 
-		/* sauvegarde du flux xml en cache */
+
+		/* pour sauvegarde du flux xml en cache */
 		File cacheDirectory = getBaseContext().getCacheDir();
-		File tmpFile = new File(cacheDirectory.getPath() + "/senateurs.xml");
+		File tmpFile = new File(cacheDirectory.getPath() + getResources().getString(R.string.fic_cache));
 		FileOutputStream out = new FileOutputStream(tmpFile);
 		InputStream in = conn.getInputStream();
 		byte[] buffer = new byte[1024];
@@ -274,6 +287,8 @@ public class SenList extends ListActivity
 		out.flush();
 		out.close();
 		in.close();
+		conn.disconnect();
+		return true;
 	}
 	
   private TextWatcher filterTextWatcher = new TextWatcher() {
@@ -348,6 +363,7 @@ public class SenList extends ListActivity
 		protected void onPreExecute() {
 			layout.setVisibility(View.VISIBLE);
 			liste.setVisibility(View.GONE);
+			threadErr = MSG_OK;
 			super.onPreExecute();
 		}
 
@@ -357,7 +373,7 @@ public class SenList extends ListActivity
 			liste.setVisibility(View.VISIBLE);
 
 			/* notification à l'UI de la fin du chargement */
-			msg.arg1=1;
+			msg.arg1 = threadErr;
 			handler.sendMessage(msg);
 
 			super.onPostExecute(result);
@@ -377,12 +393,17 @@ public class SenList extends ListActivity
 
 		@Override
 		public boolean handleMessage(Message msg) {
-			if(msg.arg1==1)
+			if(msg.arg1==MSG_OK)
 			{
 				read_prefs();
 				adapter.getFilter().filter(filterText.getText());
 				adapter.notifyDataSetChanged();
 				mListView.invalidate();
+			}
+			else if (msg.arg1==MSG_ERR1)
+			{
+				Intent i = new Intent(SenList.this, SenErr.class);
+				startActivity(i);
 			}
 			return false;
 		}
