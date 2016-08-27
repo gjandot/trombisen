@@ -22,10 +22,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -52,8 +54,10 @@ public class SenList extends ListActivity
 	static final String PREF_DATEMILLIS = "d";
 	static final long H4  = 4*3600*1000; /* 4 heures, en ms */
 
-	static final int MSG_OK = 1;
-	static final int MSG_ERR1 = 2;
+	static final int MSG_OK = 0;
+	static final int MSG_ERR1 = 1;
+	static final int MSG_ERR2 = 2;
+	static final int MSG_ERR3 = 3;
 	static private int threadErr = MSG_OK;
 
 	final List<Senateur> listat = new ArrayList<Senateur>();
@@ -193,12 +197,12 @@ public class SenList extends ListActivity
 		XmlPullParser xpp = factory.newPullParser();
 
 		//xpp.setInput(downloadUrl(), null);
-		if (is_date_old()) {
+		//if (is_date_old()) {
 			if (downloadUrl())
 			{
 				save_date();
 			}
-		}
+		//}
 		FileInputStream fis = new FileInputStream(new File(getCacheDir(), "/senateurs.xml"));
 		xpp.setInput(fis, null);
 		// GESTION d'ERREUR !!!
@@ -263,14 +267,37 @@ public class SenList extends ListActivity
 		conn.setConnectTimeout(10000 /* milliseconds */);
 		conn.setRequestMethod("GET");
 		conn.setDoInput(true);
-		conn.connect();
-		if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-			threadErr = MSG_ERR1;
+		try {
+			conn.connect();
+			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+				threadErr = MSG_ERR1;
+				conn.disconnect();
+				/* on n'efface pas le cache, pour garder les dernières données connues */
+				return false;
+			}
+		//pb réseau (timeout...)
+		} catch (java.net.SocketTimeoutException e) {
+			threadErr = MSG_ERR2;
 			conn.disconnect();
-			/* on n'efface pas le cache, pour garder les dernières données connues */
+			return false;
+		} catch (java.io.IOException e) {
+			threadErr = MSG_ERR2;
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+				if (Settings.System.getInt(getContentResolver(),
+						Settings.System.AIRPLANE_MODE_ON, 0) != 0)
+				{
+					threadErr = MSG_ERR3;
+				}
+			} else {
+				if (Settings.Global.getInt(getContentResolver(),
+						Settings.Global.AIRPLANE_MODE_ON, 0) != 0);
+				{
+					threadErr = MSG_ERR3;
+				}
+			}
+			conn.disconnect();
 			return false;
 		}
-		//TODO : pb réseau (timeout...)
 
 
 		/* pour sauvegarde du flux xml en cache */
@@ -400,9 +427,12 @@ public class SenList extends ListActivity
 				adapter.notifyDataSetChanged();
 				mListView.invalidate();
 			}
-			else if (msg.arg1==MSG_ERR1)
+			else
 			{
 				Intent i = new Intent(SenList.this, SenErr.class);
+				Bundle b = new Bundle();
+				b.putInt("n", msg.arg1);
+				i.putExtras(b);
 				startActivity(i);
 			}
 			return false;

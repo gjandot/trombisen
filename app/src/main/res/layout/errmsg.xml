@@ -12,7 +12,7 @@ android:background="@color/fond">
 		android:background="@color/fond">
 	<LinearLayout
 		android:layout_width="wrap_content"
-		android:layout_height="442dp"
+		android:layout_height="300dp"
 		android:orientation="horizontal"
 		android:layout_gravity="center"
 		android:gravity="center">
@@ -22,14 +22,29 @@ android:background="@color/fond">
 			android:layout_height="wrap_content"
 			android:paddingRight="9dp"
 			android:tint="@color/err"/>
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="300dp"
+			android:orientation="vertical"
+			android:layout_gravity="center"
+			android:gravity="center">
+		<TextView
+			android:id="@+id/errmaj"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/errmaj"
+			android:textColor="@color/err"
+			android:padding="9dp"
+			android:textSize="20dp"/>
 		<TextView
 			android:id="@+id/errmsg"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="@string/err1"
+			android:text="@string/err0"
 			android:textColor="@color/err"
 			android:padding="9dp"
 			android:textSize="20dp"/>
+		</LinearLayout>
 		</LinearLayout>
 		<Button
 			android:layout_width="wrap_content"
