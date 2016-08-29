@@ -6,14 +6,18 @@ import android.content.Context;
 public class FileCache {
     
     private File cacheDir;
-    
+
     public FileCache(Context context){
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-            cacheDir=new File(android.os.Environment.getExternalStorageDirectory(),"TrombiSen");
+        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), context.getString(R.string.app_name));
+        }
         else
+        {
             cacheDir=context.getCacheDir();
-        if(!cacheDir.exists())
+        }
+        if (!cacheDir.exists()) {
             cacheDir.mkdirs();
+        }
     }
     
     public File getFile(String url){
@@ -25,9 +29,11 @@ public class FileCache {
     
     public void clear(){
         File[] files=cacheDir.listFiles();
-        if(files==null)
+        if (files==null) {
             return;
-        for(File f:files)
+        }
+        for (File f:files) {
             f.delete();
+        }
     }
 }

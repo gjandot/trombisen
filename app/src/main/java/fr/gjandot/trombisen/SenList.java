@@ -52,7 +52,10 @@ public class SenList extends ListActivity
 	static final String PREF_FILTRE = "f";
 	static final String PREF_NUMGROUPE = "g";
 	static final String PREF_DATEMILLIS = "d";
+	static final String HASH_FLAG = "flag";
+	static final String HASH_POSITION = "position";
 	static final long H4  = 4*3600*1000; /* 4 heures, en ms */
+	static final long D3 = 3*24*3600*1000; /* 3 jours, en ms */
 
 	static final int MSG_OK = 0;
 	static final int MSG_ERR1 = 1;
@@ -147,7 +150,6 @@ public class SenList extends ListActivity
         });
 		mListView.setAdapter(adapter);
 
-
 		spinner = (Spinner) findViewById(R.id.spinner);
 
 		ArrayAdapter<String> adp = new ArrayAdapter<String> (this, R.layout.spinner, listeGroupes);
@@ -197,12 +199,16 @@ public class SenList extends ListActivity
 		XmlPullParser xpp = factory.newPullParser();
 
 		//xpp.setInput(downloadUrl(), null);
-		//if (is_date_old()) {
+		if (is_date_old()) {
 			if (downloadUrl())
 			{
+				if (is_date_very_old())
+				{
+					adapter.clearImageCache();
+				}
 				save_date();
 			}
-		//}
+		}
 		FileInputStream fis = new FileInputStream(new File(getCacheDir(), "/senateurs.xml"));
 		xpp.setInput(fis, null);
 		// GESTION d'ERREUR !!!
@@ -272,11 +278,15 @@ public class SenList extends ListActivity
 			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
 				threadErr = MSG_ERR1;
 				conn.disconnect();
-				/* on n'efface pas le cache, pour garder les dernières données connues */
+				/* on n'efface pas le fichier en cache, pour garder les dernières données connues */
 				return false;
 			}
 		//pb réseau (timeout...)
 		} catch (java.net.SocketTimeoutException e) {
+			threadErr = MSG_ERR2;
+			conn.disconnect();
+			return false;
+		} catch (java.net.UnknownHostException e) {
 			threadErr = MSG_ERR2;
 			conn.disconnect();
 			return false;
@@ -364,8 +374,8 @@ public class SenList extends ListActivity
 				fOutStream.close();
 
 				HashMap<String, Object> hmBitmap = new HashMap<String, Object>();
-				hmBitmap.put("flag", tmpFile.getPath());
-				hmBitmap.put("position", position);
+				hmBitmap.put(HASH_FLAG, tmpFile.getPath());
+				hmBitmap.put(HASH_POSITION, position);
 				return hmBitmap;
 
 			}catch (Exception e) {
@@ -376,11 +386,11 @@ public class SenList extends ListActivity
 
 		@Override
 		protected void onPostExecute(HashMap<String, Object> result) {
-			String path = (String) result.get("flag");
-			int position = (Integer) result.get("position");
+			String path = (String) result.get(HASH_FLAG);
+			int position = (Integer) result.get(HASH_POSITION);
 			SimpleAdapter adapter = (SimpleAdapter) mListView.getAdapter();
 			HashMap<String, Object> hm = (HashMap<String, Object>) adapter.getItem(position);
-			hm.put("flag",path);
+			hm.put(HASH_FLAG, path);
 			adapter.notifyDataSetChanged();
 		}
 	}
@@ -438,7 +448,6 @@ public class SenList extends ListActivity
 			return false;
 		}
 	});
-
 
 
 	void maj_btns() {
@@ -500,6 +509,18 @@ public class SenList extends ListActivity
 		SharedPreferences.Editor ed = mPrefs.edit();
 		ed.putLong(PREF_DATEMILLIS, System.currentTimeMillis());
 		ed.commit();
+	}
+
+	private boolean is_date_very_old()
+	{
+		SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+		long now = System.currentTimeMillis();
+		return (now - mPrefs.getLong(PREF_DATEMILLIS, 0) > D3);
+		/*
+		if (now- mPrefs.getLong(PREF_DATEMILLIS, 0) > D3) {
+			return true;
+		}
+		return false;*/
 	}
 
 	private boolean is_date_old()

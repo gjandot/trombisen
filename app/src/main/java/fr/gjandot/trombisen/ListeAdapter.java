@@ -85,7 +85,7 @@ public class ListeAdapter extends BaseAdapter  implements Filterable {
          if (mFilter == null) {
                 mFilter = new FiltreStations();
             }
-            return mFilter;
+        return mFilter;
     }
     
     
@@ -123,7 +123,6 @@ public class ListeAdapter extends BaseAdapter  implements Filterable {
                 }
                 if (ajout) {
                     if (constraint != null && constraint.toString().length() > 0) {
-
                         if (sen.getNom().charAt(0) != '-') {
                             if (sen.getNom().toUpperCase().contains(constraint.toString().toUpperCase())) {
                                 filtreSenateurs.add(sen);
@@ -139,6 +138,11 @@ public class ListeAdapter extends BaseAdapter  implements Filterable {
         results.count = filtreSenateurs.size();
         return results;
         }
+    }
+
+    void clearImageCache()
+    {
+        imageLoader.clearCache();
     }
 }
 
