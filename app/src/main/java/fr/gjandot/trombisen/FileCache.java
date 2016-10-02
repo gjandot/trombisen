@@ -8,13 +8,7 @@ public class FileCache {
     private File cacheDir;
 
     public FileCache(Context context){
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
-            cacheDir = new File(android.os.Environment.getExternalStorageDirectory(), context.getString(R.string.app_name));
-        }
-        else
-        {
-            cacheDir=context.getCacheDir();
-        }
+        cacheDir=context.getCacheDir();
         if (!cacheDir.exists()) {
             cacheDir.mkdirs();
         }
@@ -24,7 +18,6 @@ public class FileCache {
         String filename=String.valueOf(url.hashCode());
         File f = new File(cacheDir, filename);
         return f;
-        
     }
     
     public void clear(){
