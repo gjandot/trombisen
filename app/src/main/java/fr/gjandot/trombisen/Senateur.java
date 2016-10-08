@@ -32,22 +32,27 @@ public class Senateur {
 		return nom;
 	}
 	public void setNom(String nom) { this.nom = nom; }
+
 	public String getImgUrl() {
 		return this.imgurl;
 	}
 	public void setImgUrl(String imgurl) { this.imgurl = imgurl; }
+
 	public String getSenUrl() {
 		return this.senurl;
 	}
 	public void setSenUrl(String senurl) { this.senurl = senurl; }
+
 	public String getGrp() {
 		return this.grp;
 	}
 	public void setGrp(String grp) { this.grp = grp; }
+
 	public String getCirco() {
 		return this.circo;
 	}
 	public void setCirco(String circo) { this.circo = circo; }
+
 	public void setSexe_H(boolean sexe_h) { this.sexe_H = sexe_h;}
 	public boolean isSexe_H() { return this.sexe_H; }
 

@@ -198,9 +198,8 @@ public class SenList extends ListActivity
 		factory.setNamespaceAware(true);
 		XmlPullParser xpp = factory.newPullParser();
 
-		//xpp.setInput(downloadUrl(), null);
 		if (is_date_old()) {
-			if (downloadUrl())
+			if (downloadXML())
 			{
 				if (is_date_very_old())
 				{
@@ -209,7 +208,8 @@ public class SenList extends ListActivity
 				save_date();
 			}
 		}
-		FileInputStream fis = new FileInputStream(new File(getCacheDir(), "/senateurs.xml"));
+
+		FileInputStream fis = new FileInputStream(new File(getCacheDir(), getResources().getString(R.string.fic_cache)));
 		xpp.setInput(fis, null);
 		// GESTION d'ERREUR !!!
 		int eventType = xpp.getEventType();
@@ -264,7 +264,7 @@ public class SenList extends ListActivity
 	}
 
 
-	private boolean downloadUrl() throws XmlPullParserException, IOException {
+	private boolean downloadXML() throws XmlPullParserException, IOException {
 
 		URL url = new URL(getResources().getString(R.string.url_data));
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();

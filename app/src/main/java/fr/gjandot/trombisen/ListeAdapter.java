@@ -20,9 +20,9 @@ public class ListeAdapter extends BaseAdapter  implements Filterable {
     private Filter mFilter;
     public ImageLoader imageLoader;
 
-    public ListeAdapter(Context context, List<Senateur> listStations) {
+    public ListeAdapter(Context context, List<Senateur> listIn) {
         this.context = context;
-        this.listSenateurs = listStations;
+        this.listSenateurs = listIn;
         this.tousSenateurs = this.listSenateurs;
         this.getFilter().filter("");
         imageLoader=new ImageLoader(context);
@@ -83,13 +83,13 @@ public class ListeAdapter extends BaseAdapter  implements Filterable {
     @Override
     public Filter getFilter() {
          if (mFilter == null) {
-                mFilter = new FiltreStations();
+                mFilter = new FiltreParlement();
             }
         return mFilter;
     }
     
     
-    private class FiltreStations extends Filter {
+    private class FiltreParlement extends Filter {
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
