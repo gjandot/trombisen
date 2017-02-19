@@ -209,6 +209,7 @@ public class SenList extends ListActivity
 			}
 		}
 
+		listat.clear();
 		FileInputStream fis = new FileInputStream(new File(getCacheDir(), getResources().getString(R.string.fic_cache)));
 		xpp.setInput(fis, null);
 		// GESTION d'ERREUR !!!
