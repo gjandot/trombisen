@@ -30,7 +30,6 @@ import android.os.StrictMode;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -208,7 +207,7 @@ public class SenList extends ListActivity
 		factory.setNamespaceAware(true);
 		XmlPullParser xpp = factory.newPullParser();
 
-		/*if (is_date_old()) {
+		if (is_date_old()) {
 			if (downloadXML())
 			{
 				if (is_date_very_old())
@@ -217,7 +216,7 @@ public class SenList extends ListActivity
 				}
 				save_date();
 			}
-		}*/
+		}
 		downloadXML();
 
 		//int cpt = 0;
