@@ -217,7 +217,6 @@ public class SenList extends ListActivity
 				save_date();
 			}
 		}
-		downloadXML();
 
 		//int cpt = 0;
 		listat.clear();
