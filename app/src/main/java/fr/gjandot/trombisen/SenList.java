@@ -30,6 +30,7 @@ import android.os.StrictMode;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -70,7 +71,7 @@ public class SenList extends ListActivity
 	private ListView mListView = null;
 	private EditText filterText = null;
 	private Spinner spinner = null;
-	private ImageButton imgbtnH=null, imgbtnF=null, imgclrFilt=null;
+	private ImageButton imgbtnH=null, imgbtnF=null, imgbtnR=null, imgclrFilt=null;
 	public static boolean vueH = true, vueF = true;
 	public static String filtreGroupe;
 	private static ArrayList<String> listeGroupes;
@@ -128,6 +129,15 @@ public class SenList extends ListActivity
 				}
 				adapter.getFilter().filter(filterText.getText());
 				maj_btns();
+			}
+		});
+
+
+		imgbtnR = (ImageButton) findViewById(R.id.btnR);
+		imgbtnR.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				new Task().execute();
 			}
 		});
 
@@ -198,7 +208,7 @@ public class SenList extends ListActivity
 		factory.setNamespaceAware(true);
 		XmlPullParser xpp = factory.newPullParser();
 
-		if (is_date_old()) {
+		/*if (is_date_old()) {
 			if (downloadXML())
 			{
 				if (is_date_very_old())
@@ -207,16 +217,20 @@ public class SenList extends ListActivity
 				}
 				save_date();
 			}
-		}
+		}*/
+		downloadXML();
 
+		//int cpt = 0;
 		listat.clear();
 		FileInputStream fis = new FileInputStream(new File(getCacheDir(), getResources().getString(R.string.fic_cache)));
 		xpp.setInput(fis, null);
 		// GESTION d'ERREUR !!!
 		int eventType = xpp.getEventType();
 		while (eventType != XmlPullParser.END_DOCUMENT) {
+
 			//if(eventType == XmlPullParser.START_DOCUMENT) {
 			if(eventType == XmlPullParser.START_TAG) {
+				//cpt++;
 				element = xpp.getName();
 			} else if(eventType == XmlPullParser.END_TAG) {
 				if (element.equals("twitter"))//dernier élément
@@ -399,6 +413,7 @@ public class SenList extends ListActivity
 	class Task extends AsyncTask<String, Integer, Boolean> {
 		@Override
 		protected void onPreExecute() {
+			save_prefs(); //nécessaire en cas de "Refresh"
 			layout.setVisibility(View.VISIBLE);
 			liste.setVisibility(View.GONE);
 			threadErr = MSG_OK;
@@ -411,6 +426,7 @@ public class SenList extends ListActivity
 			liste.setVisibility(View.VISIBLE);
 
 			/* notification à l'UI de la fin du chargement */
+			Message msg = new Message(); // toujours bien recréer les messages
 			msg.arg1 = threadErr;
 			handler.sendMessage(msg);
 
@@ -424,9 +440,7 @@ public class SenList extends ListActivity
 		}
 	}
 
-
 	/* récepteur de la notification de la fin du chargement des données */
-	Message msg = new Message();
 	Handler handler = new Handler(new Handler.Callback() {
 
 		@Override
@@ -436,7 +450,7 @@ public class SenList extends ListActivity
 				read_prefs();
 				adapter.getFilter().filter(filterText.getText());
 				adapter.notifyDataSetChanged();
-				mListView.invalidate();
+				//mListView.invalidate();
 			}
 			else
 			{
