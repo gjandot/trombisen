@@ -207,13 +207,13 @@ public class SenList extends ListActivity
 		factory.setNamespaceAware(true);
 		XmlPullParser xpp = factory.newPullParser();
 
+		if (is_date_very_old())
+		{
+			adapter.clearImageCache();
+		}
 		if (is_date_old()) {
 			if (downloadXML())
 			{
-				if (is_date_very_old())
-				{
-					adapter.clearImageCache();
-				}
 				save_date();
 			}
 		}
@@ -439,6 +439,7 @@ public class SenList extends ListActivity
 	}
 
 	/* récepteur de la notification de la fin du chargement des données */
+					 
 	Handler handler = new Handler(new Handler.Callback() {
 
 		@Override
