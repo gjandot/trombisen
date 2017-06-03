@@ -248,7 +248,7 @@ public class SenList extends ListActivity
 					mSenateur.setGrp(xpp.getText());
 					if (!(listeGroupes.contains(SenGrp)))
 					{
-						listeGroupes.add(SenGrp);
+						//listeGroupes.add(SenGrp);
 					}
 				}
 				if (element.equals("prenom") )
@@ -478,6 +478,15 @@ public class SenList extends ListActivity
 		else
 		{
 			imgbtnH.setImageResource(R.drawable.sexe_noh);
+		}
+
+		if (spinner.getAdapter().getCount() > 1)
+		{
+			spinner.setEnabled(true);
+		}
+		else
+		{
+			spinner.setEnabled(false);
 		}
 	}
 
