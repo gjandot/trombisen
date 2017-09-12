@@ -19,15 +19,15 @@
 	    android:layout_height="wrap_content"
 		android:layout_width="fill_parent" 
 		android:text="---" android:textSize="20sp"/>
-		<TextView android:text="..."
+		<TextView android:text="@string/undeftxt"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/sengroupe" android:textSize="14sp"
-			android:textColor="#FFFFFF44"/>
-		<TextView android:text="..."
+			android:textColor="@color/txt"/>
+		<TextView android:text="@string/undeftxt"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:id="@+id/sencirco" android:textSize="14sp"
-			android:textColor="#FFFFFF44"/>
+			android:textColor="@color/txt"/>
 	</LinearLayout>
 </LinearLayout>

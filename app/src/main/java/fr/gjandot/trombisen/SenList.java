@@ -248,7 +248,7 @@ public class SenList extends ListActivity
 					mSenateur.setGrp(xpp.getText());
 					if (!(listeGroupes.contains(SenGrp)))
 					{
-						//listeGroupes.add(SenGrp);
+						listeGroupes.add(SenGrp);
 					}
 				}
 				if (element.equals("prenom") )
@@ -258,6 +258,10 @@ public class SenList extends ListActivity
 				if (element.equals("sexe"))
 				{
 					mSenateur.setSexe_H(xpp.getText().equals("H"));
+				}
+				if (element.equals("num_deptmt"))
+				{
+					mSenateur.setNumDpt(xpp.getText());
 				}
 				if (element.equals("nom_circo"))
 				{
@@ -286,6 +290,7 @@ public class SenList extends ListActivity
 		conn.setConnectTimeout(10000 /* milliseconds */);
 		conn.setRequestMethod("GET");
 		conn.setDoInput(true);
+		conn.setInstanceFollowRedirects(true);
 		try {
 			conn.connect();
 			if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {

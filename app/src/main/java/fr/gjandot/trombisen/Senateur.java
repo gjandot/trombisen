@@ -8,6 +8,7 @@ public class Senateur {
 	private String imgurl;
 	private String senurl;
 	private String circo;
+	private String numdpt;
 	private String grp;
 	private boolean sexe_H = true;
 
@@ -21,6 +22,7 @@ public class Senateur {
 		this.grp = sen.grp;
 		this.sexe_H = sen.sexe_H;
 		this.circo = sen.circo;
+		this.numdpt = sen.numdpt;
 	}
 
 	public Senateur()
@@ -52,6 +54,13 @@ public class Senateur {
 		return this.circo;
 	}
 	public void setCirco(String circo) { this.circo = circo; }
+
+	public String getLongCirco() { return this.circo + " (" + this.numdpt + ")"; }
+
+	public String getNumDpt() {
+		return this.numdpt;
+	}
+	public void setNumDpt(String numdpt) { this.numdpt = numdpt; }
 
 	public void setSexe_H(boolean sexe_h) { this.sexe_H = sexe_h;}
 	public boolean isSexe_H() { return this.sexe_H; }

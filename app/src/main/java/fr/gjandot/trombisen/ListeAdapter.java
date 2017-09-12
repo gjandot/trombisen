@@ -61,7 +61,8 @@ public class ListeAdapter extends BaseAdapter  implements Filterable {
         TextView tvGroupe = (TextView) convertView.findViewById(R.id.sengroupe);
         tvGroupe.setText(entry.getGrp());
         TextView tvCirco = (TextView) convertView.findViewById(R.id.sencirco);
-        tvCirco.setText(entry.getCirco());
+        //tvCirco.setText(entry.getCirco());
+        tvCirco.setText(entry.getLongCirco());
         maVue = (ImageView) convertView.findViewById(R.id.imageView);
         if (entry.isSexe_H())
         {
